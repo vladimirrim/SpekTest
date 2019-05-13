@@ -1,0 +1,56 @@
+buildscript {
+    // use specific Kotlin version
+    ext.kotlin_version = '1.3.30'
+}
+
+plugins {
+    // install Kotlin JVM gradle plugin
+    id 'org.jetbrains.kotlin.jvm' version '1.3.30'
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://dl.bintray.com/spekframework/spek-dev" }
+}
+
+dependencies {
+
+    
+    // comment this lines for spek 2
+    testCompile 'org.jetbrains.spek:spek-api:1.1.5'
+    testRuntime 'org.jetbrains.spek:spek-junit-platform-engine:1.1.5'
+    
+    // coment this line for spek 1
+ //   testRuntime "org.junit.platform:junit-platform-launcher:1.0.0-M4"
+
+    // include Kotlin standard library
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // include JUnit 5 assertions
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'
+
+    // include Spek 2 JUnit test engine
+    testRuntimeOnly 'org.spekframework.spek2:spek-runner-junit5:2.1.0-alpha.0.4+a98a9ec'
+
+    // include Spek 2 library
+    testImplementation 'org.spekframework.spek2:spek-dsl-jvm:2.1.0-alpha.0.4+a98a9ec'
+
+    // include JUnit 5 test engine
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+
+    testRuntimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+}
+
+// configure test task to use Spek 2 test engine with JUnit
+test {
+    useJUnitPlatform {
+        includeEngines 'spek', 'spek2'
+    }
+}
+
+// set JVM target to 1.8 for all compilation tasks
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
